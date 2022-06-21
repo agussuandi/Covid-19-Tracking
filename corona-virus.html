@@ -41,17 +41,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarColor02">
                 <ul class="navbar-nav mr-auto">
-                    <!-- <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li> -->
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li> -->
                 </ul>
-                <!-- <form class="form-inline">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-                </form> -->
             </div>
         </div>
     </nav>
@@ -95,10 +85,14 @@
                 <div class="row">
                     <form class="m-3">
                         <div class="form-group row">
-                            <label for="country" class="col-sm-3 pr-0 col-form-label">Country&nbsp;&nbsp;<span id="countryImage"><img src="https://restcountries.eu/data/idn.svg" style="display: inline-block; width: 2em; height: 2em; vertical-align: middle;"/></span></label>
+                            <label for="country" class="col-sm-3 pr-0 col-form-label">Country&nbsp;&nbsp;
+                                <span id="countryImage">
+                                    <img src="https://flagcdn.com/id.svg" style="display: inline-block; width: 2em; height: 2em; vertical-align: middle;"/>
+                                </span>
+                            </label>
                             <div class="col-sm-9 pl-0">
                                 <select class="form-control" id="country" onchange="getCovidData(this)">
-                                    <!-- APPEND CONTENT -->
+                                    <option value="disabled" selected>-- Choose one --</option>
                                 </select>
                             </div>
                         </div>
@@ -195,27 +189,24 @@
             });
         }
 
-        function getCountryData()
+        async function getCountryData()
         {
-            axios.get(`https://restcountries.eu/rest/v2/all`)
+            await axios.get(`https://restcountries.com/v3.1/all`)
             .then(function (response)
             {
                 let dataResp = response.data;
                 for (let i = 0; i < dataResp.length; i++)
                 {
-                    $('#country').append(`<option value='${dataResp[i].alpha2Code}' data-flag='${dataResp[i].flag}'>${dataResp[i].name}</option>`);
+                    $('#country').append(`<option value='${dataResp[i].cca3}' data-flag='${dataResp[i].flags.svg}'>${dataResp[i].name.common}</option>`);
                 }
-                $('#country').val('ID');
-                $('#country').trigger("change");
             })
             .catch(function (error)
             {
                 checkingInternet();
             })
-            .then(function ()
-            {
-                // always executed
-            });
+
+            $('#country').val('IDN');
+            $('#country').trigger("change");
         }
 
         function getCovidData(obj)
